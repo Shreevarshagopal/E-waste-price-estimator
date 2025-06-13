@@ -1,0 +1,195 @@
+{% extends 'ewaste/base.html' %}
+
+{% block title %}E-Waste Collection - Home{% endblock %}
+
+{% block content %}
+<style>
+.hero-image-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.hero-image-container img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+</style>
+
+<div class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <div class="hero-content">
+                    <h1 class="display-4 fw-bold text-gradient">Transform Your E-Waste</h1>
+                    <p class="lead mb-4">Turn your old electronics into value while protecting our planet. Get instant price estimates and ensure responsible recycling.</p>
+                    <div class="cta-buttons">
+                        <a href="{% url 'calculator' %}" class="btn btn-gradient btn-lg">
+                            <i class="bi bi-calculator me-2"></i>Calculate Price
+                        </a>
+                        <a href="{% url 'submit_ewaste' %}" class="btn btn-outline-gradient btn-lg">
+                            <i class="bi bi-arrow-right-circle me-2"></i>Start Recycling
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="hero-image-container">
+                    <img src="https://www.pngitem.com/pimgs/m/525-5259250_ewaste-recycling-e-waste-recycling-logo-png-transparent.png" alt="E-Waste Collection" class="img-fluid floating">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="devices-section py-5">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <h2 class="display-6 fw-bold">Accepted Devices</h2>
+            <p class="text-muted">We accept all major brands and models</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="device-card">
+                    <div class="device-icon">
+                        <img src="https://www.pngmart.com/files/15/Apple-iPhone-12-PNG-Clipart.png" alt="Smartphone" class="img-fluid">
+                    </div>
+                    <div class="device-content">
+                        <h3>Smartphones</h3>
+                        <p>iPhone, Samsung, OnePlus, and more</p>
+                        <a href="{% url 'calculator' %}" class="btn btn-outline-primary rounded-pill">
+                            <i class="bi bi-calculator me-2"></i>Calculate Value
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="device-card">
+                    <div class="device-icon">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsrpFS0ZZ3nSLi3jNcAZALUVkbmiIbdFtwBQ&s" alt="Laptop" class="img-fluid">
+                    </div>
+                    <div class="device-content">
+                        <h3>Laptops</h3>
+                        <p>MacBook, Dell, HP, Lenovo, and more</p>
+                        <a href="{% url 'calculator' %}" class="btn btn-outline-primary rounded-pill">
+                            <i class="bi bi-calculator me-2"></i>Calculate Value
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="device-card">
+                    <div class="device-icon">
+                        <img src="https://www.allhomeproduct.in/wp-content/uploads/2019/07/Samsung-Galaxy-Tab-S3-32-GB-9.7-inch-with-Wi-Fi4G-Tablet-Black.jpeg" alt="Tablet" class="img-fluid">
+                    </div>
+                    <div class="device-content">
+                        <h3>Tablets</h3>
+                        <p>iPad, Samsung Tab, and more</p>
+                        <a href="{% url 'calculator' %}" class="btn btn-outline-primary rounded-pill">
+                            <i class="bi bi-calculator me-2"></i>Calculate Value
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="pricing-factors py-5">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <h2 class="display-6 fw-bold">How We Calculate Value</h2>
+            <p class="text-muted">Our advanced pricing algorithm considers multiple factors</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="pricing-card">
+                    <div class="pricing-icon">
+                        <i class="bi bi-phone"></i>
+                    </div>
+                    <h3>Device Type</h3>
+                    <p>Base value from our comprehensive device database</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="pricing-card">
+                    <div class="pricing-icon">
+                        <i class="bi bi-calendar-check"></i>
+                    </div>
+                    <h3>Device Age</h3>
+                    <p>Up to 80% depreciation over 5 years</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="pricing-card">
+                    <div class="pricing-icon">
+                        <i class="bi bi-gear-fill"></i>
+                    </div>
+                    <h3>Condition</h3>
+                    <p>Working: 100%<br>Partially: 60%<br>Not Working: 30%</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="pricing-card">
+                    <div class="pricing-icon">
+                        <i class="bi bi-recycle"></i>
+                    </div>
+                    <h3>Materials</h3>
+                    <p>Value of recyclable materials (gold, silver, copper, etc.)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features-section py-5">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <h2 class="display-6 fw-bold">Why Choose Us?</h2>
+            <p class="text-muted">Experience the best e-waste recycling service</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-currency-dollar"></i>
+                    </div>
+                    <h3>Best Value</h3>
+                    <p>Get competitive prices for your devices based on condition and market value</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-shield-lock"></i>
+                    </div>
+                    <h3>Safe & Secure</h3>
+                    <p>Professional data wiping and secure handling of your devices</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-recycle"></i>
+                    </div>
+                    <h3>Eco-Friendly</h3>
+                    <p>Responsible recycling practices to protect our environment</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section py-5">
+    <div class="container">
+        <div class="cta-card text-center">
+            <h2 class="display-6 fw-bold mb-4">Ready to Recycle?</h2>
+            <p class="lead mb-4">Get an instant price estimate for your device</p>
+            <a href="{% url 'calculator' %}" class="btn btn-gradient btn-lg">
+                <i class="bi bi-calculator me-2"></i>Calculate Now
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

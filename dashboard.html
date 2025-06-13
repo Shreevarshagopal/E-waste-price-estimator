@@ -1,0 +1,234 @@
+{% extends 'ewaste/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - E-Waste Collection{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<!-- Dashboard Header -->
+<div class="dashboard-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="mb-2">Welcome, {{ user.username }}!</h1>
+                <p class="mb-0 text-white-50">Manage your e-waste items and collection schedules</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'submit_ewaste' %}" class="btn btn-light btn-lg">
+                    <i class="bi bi-plus-circle"></i> Submit New E-Waste
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="stats-card">
+                <i class="bi bi-devices stats-icon"></i>
+                <h3>{{ items.count }}</h3>
+                <p class="text-muted mb-0">Total Items</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card">
+                <i class="bi bi-calendar-check stats-icon"></i>
+                <h3>{{ scheduled_collections }}</h3>
+                <p class="text-muted mb-0">Scheduled Collections</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card">
+                <i class="bi bi-currency-dollar stats-icon"></i>
+                <h3>₹{{ total_value|default:0|floatformat:2 }}</h3>
+                <p class="text-muted mb-0">Total Value</p>
+            </div>
+        </div>
+    </div>
+
+    {% if items %}
+    <!-- E-Waste Items Grid -->
+    <div class="row">
+        {% for item in items %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card e-waste-card h-100">
+                {% if item.image %}
+                <div class="card-img-top-wrapper" style="height: 200px; overflow: hidden;">
+                    <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.brand }} {{ item.model }}" style="height: 100%; object-fit: cover;">
+                </div>
+                {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <i class="bi bi-device-hdd fs-1 text-muted"></i>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.brand }} {{ item.model }}</h5>
+                    <div class="card-text mb-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-tag me-2 text-primary"></i>
+                            <span>{{ item.get_item_type_display }}</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-tools me-2 text-success"></i>
+                            <span>{{ item.get_functional_status_display }}</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-calendar me-2 text-info"></i>
+                            <span>{{ item.created_at|date:"M d, Y" }}</span>
+                        </div>
+                    </div>
+                    {% if item.price_estimation %}
+                    <div class="price-badge bg-success bg-opacity-10 text-success p-2 rounded-pill mb-3">
+                        <i class="bi bi-currency-dollar"></i>
+                        <strong>₹{{ item.price_estimation|floatformat:2 }}</strong>
+                    </div>
+                    {% endif %}
+                    <div class="action-buttons d-flex justify-content-between align-items-center">
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#itemModal{{ item.id }}">
+                            <i class="bi bi-eye"></i> View Details
+                        </button>
+                        {% if not item.collection_schedule %}
+                        <a href="{% url 'schedule_collection' item.id %}" class="btn btn-success">
+                            <i class="bi bi-calendar-plus"></i> Schedule
+                        </a>
+                        {% else %}
+                        <span class="status-badge bg-info bg-opacity-10 text-info">
+                            <i class="bi bi-calendar-check"></i> Scheduled
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item Details Modal -->
+        <div class="modal fade item-details-modal" id="itemModal{{ item.id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="bi bi-info-circle me-2"></i>
+                            {{ item.brand }} {{ item.model }} Details
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="item-image-container">
+                                    {% if item.image %}
+                                    <img src="{{ item.image.url }}" class="img-fluid rounded" alt="{{ item.brand }} {{ item.model }}">
+                                    {% else %}
+                                    <div class="bg-light d-flex align-items-center justify-content-center rounded" style="height: 300px;">
+                                        <i class="bi bi-device-hdd display-1 text-muted"></i>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-primary mb-3">Device Information</h6>
+                                <ul class="item-info-list list-unstyled">
+                                    <li class="d-flex justify-content-between">
+                                        <span>Type</span>
+                                        <strong>{{ item.get_item_type_display }}</strong>
+                                    </li>
+                                    <li class="d-flex justify-content-between">
+                                        <span>Brand</span>
+                                        <strong>{{ item.brand }}</strong>
+                                    </li>
+                                    <li class="d-flex justify-content-between">
+                                        <span>Model</span>
+                                        <strong>{{ item.model }}</strong>
+                                    </li>
+                                    <li class="d-flex justify-content-between">
+                                        <span>Age</span>
+                                        <strong>{{ item.age }} years</strong>
+                                    </li>
+                                    <li class="d-flex justify-content-between">
+                                        <span>Functional Status</span>
+                                        <strong>{{ item.get_functional_status_display }}</strong>
+                                    </li>
+                                    <li class="d-flex justify-content-between">
+                                        <span>Battery Status</span>
+                                        <strong>{{ item.get_battery_status_display }}</strong>
+                                    </li>
+                                    <li class="d-flex justify-content-between">
+                                        <span>Screen Condition</span>
+                                        <strong>{{ item.get_screen_condition_display }}</strong>
+                                    </li>
+                                    <li class="d-flex justify-content-between">
+                                        <span>Motherboard Status</span>
+                                        <strong>{{ item.get_motherboard_status_display }}</strong>
+                                    </li>
+                                    <li class="d-flex justify-content-between">
+                                        <span>Submitted</span>
+                                        <strong>{{ item.created_at|date:"F d, Y" }}</strong>
+                                    </li>
+                                    {% if item.price_estimation %}
+                                    <li class="d-flex justify-content-between">
+                                        <span>Estimated Value</span>
+                                        <strong class="text-success">₹{{ item.price_estimation|floatformat:2 }}</strong>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                                
+                                {% if item.description %}
+                                <h6 class="text-primary mb-3 mt-4">Description</h6>
+                                <p class="mb-4">{{ item.description }}</p>
+                                {% endif %}
+                                
+                                {% if item.collection_schedule %}
+                                <h6 class="text-primary mb-3">Collection Details</h6>
+                                <ul class="item-info-list list-unstyled">
+                                    <li class="d-flex justify-content-between">
+                                        <span>Date</span>
+                                        <strong>{{ item.collection_schedule.preferred_date|date:"F d, Y" }}</strong>
+                                    </li>
+                                    <li class="d-flex justify-content-between">
+                                        <span>Time</span>
+                                        <strong>{{ item.collection_schedule.preferred_time|time:"g:i A" }}</strong>
+                                    </li>
+                                    <li class="d-flex justify-content-between">
+                                        <span>Status</span>
+                                        <span class="badge bg-{{ item.collection_schedule.get_status_color }}">
+                                            {{ item.collection_schedule.get_status_display }}
+                                        </span>
+                                    </li>
+                                    <li class="d-flex justify-content-between">
+                                        <span>Address</span>
+                                        <strong>{{ item.collection_schedule.pickup_address }}</strong>
+                                    </li>
+                                </ul>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <a href="{% url 'delete_ewaste' item.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item? This action cannot be undone.')">
+                            <i class="bi bi-trash"></i> Delete Item
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Empty State -->
+    <div class="empty-state">
+        <i class="bi bi-inbox empty-state-icon"></i>
+        <h3>No E-Waste Items Yet</h3>
+        <p class="text-muted">Start by submitting your first e-waste item for recycling</p>
+        <a href="{% url 'submit_ewaste' %}" class="btn btn-primary btn-lg">
+            <i class="bi bi-plus-circle"></i> Submit E-Waste
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

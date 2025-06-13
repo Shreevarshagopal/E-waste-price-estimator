@@ -1,0 +1,211 @@
+{% extends 'ewaste/base.html' %}
+{% load static %}
+
+{% block title %}Submit E-Waste - E-Waste Collection{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/submit_ewaste.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<!-- Submit Header -->
+<div class="submit-header">
+    <div class="container">
+        <h1 class="mb-2">Submit E-Waste</h1>
+        <p class="mb-0 text-white-50">Fill in the details about your e-waste item for recycling</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="form-container">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <!-- Device Information Section -->
+                    <div class="form-section">
+                        <h4 class="section-title">Device Information</h4>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.item_type.id_for_label }}" class="form-label">Device Type</label>
+                                <select id="{{ form.item_type.id_for_label }}" name="item_type" class="form-select">
+                                    <option value="">Select Device Type</option>
+                                    <option value="smartphone">Smartphone</option>
+                                    <option value="laptop">Laptop</option>
+                                    <option value="tablet">Tablet</option>
+                                    <option value="tv">TV</option>
+                                    <option value="gaming console">Gaming Console</option>
+                                </select>
+                                {% if form.item_type.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.item_type.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.brand.id_for_label }}" class="form-label">Brand</label>
+                                <input type="text" id="{{ form.brand.id_for_label }}" name="brand" class="form-control" placeholder="Select brand">
+                                {% if form.brand.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.brand.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.model.id_for_label }}" class="form-label">Model</label>
+                                <input type="text" id="{{ form.model.id_for_label }}" name="model" class="form-control" placeholder="Select model">
+                                {% if form.model.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.model.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.age.id_for_label }}" class="form-label">Age (years)</label>
+                                {{ form.age }}
+                                {% if form.age.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.age.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Device Status Section -->
+                    <div class="form-section">
+                        <h4 class="section-title">Device Status</h4>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.functional_status.id_for_label }}" class="form-label">Functional Status</label>
+                                {{ form.functional_status }}
+                                {% if form.functional_status.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.functional_status.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.battery_status.id_for_label }}" class="form-label">Battery Status</label>
+                                {{ form.battery_status }}
+                                {% if form.battery_status.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.battery_status.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.screen_condition.id_for_label }}" class="form-label">Screen Condition</label>
+                                {{ form.screen_condition }}
+                                {% if form.screen_condition.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.screen_condition.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.motherboard_status.id_for_label }}" class="form-label">Motherboard Status</label>
+                                {{ form.motherboard_status }}
+                                {% if form.motherboard_status.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.motherboard_status.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                            {{ form.description }}
+                            <div class="form-text">
+                                Please provide any additional details about the device's condition or specifications
+                            </div>
+                            {% if form.description.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.description.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Image Upload Section -->
+                    <div class="form-section">
+                        <h4 class="section-title">Device Image</h4>
+                        <div class="mb-3">
+                            <label for="{{ form.image.id_for_label }}" class="form-label">Upload Device Image</label>
+                            {{ form.image }}
+                            <div class="form-text">Upload a clear image of your device (JPEG or PNG, max 5MB)</div>
+                            {% if form.image.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.image.errors }}
+                            </div>
+                            {% endif %}
+                            <div id="imagePreviewContainer" class="mt-3" style="display: none;">
+                                <img id="imagePreview" class="img-fluid rounded" style="max-height: 200px;" alt="Preview">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Submit E-Waste</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="help-text">
+                <h5>Submission Guidelines</h5>
+                <ul>
+                    <li>Make sure to select the correct device type and brand</li>
+                    <li>Provide accurate condition details to get better price estimates</li>
+                    <li>Add clear photos of your device for easier assessment</li>
+                    <li>Include any relevant specifications in the description</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/device_selector.js' %}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const imageInput = document.getElementById('{{ form.image.id_for_label }}');
+    const imagePreview = document.getElementById('imagePreview');
+    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+
+    imageInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            const file = this.files[0];
+            
+            // Validate file size (5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('File size should not exceed 5MB');
+                this.value = '';
+                imagePreviewContainer.style.display = 'none';
+                return;
+            }
+            
+            // Validate file type
+            if (!file.type.match('image.*')) {
+                alert('Please upload an image file (JPEG or PNG)');
+                this.value = '';
+                imagePreviewContainer.style.display = 'none';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                imagePreviewContainer.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+});
+</script>
+{% endblock %}

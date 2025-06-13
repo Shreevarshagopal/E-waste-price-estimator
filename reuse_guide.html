@@ -1,0 +1,184 @@
+{% extends 'ewaste/base.html' %}
+{% load static %}
+
+{% block title %}E-Waste Reuse Guide{% endblock %}
+
+{% block extra_css %}
+<style>
+    .guide-section {
+        margin-bottom: 3rem;
+    }
+    .guide-card {
+        transition: transform 0.2s;
+        height: 100%;
+    }
+    .guide-card:hover {
+        transform: translateY(-5px);
+    }
+    .icon-large {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #28a745;
+    }
+    .tip-card {
+        border-left: 4px solid #28a745;
+    }
+    .device-icon {
+        width: 64px;
+        height: 64px;
+        margin-bottom: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">E-Waste Reuse Guide</h1>
+    
+    <!-- Introduction -->
+    <div class="guide-section">
+        <div class="alert alert-info" role="alert">
+            <h4 class="alert-heading">Why Reuse E-Waste?</h4>
+            <p>Reusing electronic devices helps reduce environmental impact, saves money, and promotes sustainable consumption. Before recycling, consider these reuse options!</p>
+        </div>
+    </div>
+
+    <!-- Common Reuse Options -->
+    <div class="guide-section">
+        <h2 class="mb-4">Common Reuse Options</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card guide-card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-laptop icon-large"></i>
+                        <h3 class="h5">Repurpose</h3>
+                        <p>Transform old devices into new useful tools like digital photo frames, home servers, or security cameras.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card guide-card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-tools icon-large"></i>
+                        <h3 class="h5">Repair</h3>
+                        <p>Fix common issues like battery replacement, screen repairs, or software updates to extend device life.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card guide-card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-gift icon-large"></i>
+                        <h3 class="h5">Donate</h3>
+                        <p>Give working devices to schools, charities, or community organizations that can put them to good use.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Device-Specific Tips -->
+    <div class="guide-section">
+        <h2 class="mb-4">Device-Specific Reuse Tips</h2>
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="card tip-card">
+                    <div class="card-body">
+                        <h3 class="h5">Smartphones</h3>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">✓ Use as a dedicated GPS device</li>
+                            <li class="mb-2">✓ Convert to a home security camera</li>
+                            <li class="mb-2">✓ Create a music or media player</li>
+                            <li>✓ Use as a remote control for smart home devices</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card tip-card">
+                    <div class="card-body">
+                        <h3 class="h5">Laptops</h3>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">✓ Convert to a home media server</li>
+                            <li class="mb-2">✓ Create a dedicated learning station</li>
+                            <li class="mb-2">✓ Use as a network storage device</li>
+                            <li>✓ Set up as a backup system</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card tip-card">
+                    <div class="card-body">
+                        <h3 class="h5">Tablets</h3>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">✓ Digital photo frame</li>
+                            <li class="mb-2">✓ Kitchen recipe display</li>
+                            <li class="mb-2">✓ Children's learning device</li>
+                            <li>✓ Smart home control panel</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card tip-card">
+                    <div class="card-body">
+                        <h3 class="h5">Desktop Computers</h3>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">✓ File server or NAS setup</li>
+                            <li class="mb-2">✓ Dedicated gaming machine</li>
+                            <li class="mb-2">✓ Home automation controller</li>
+                            <li>✓ Learning computer for children</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Best Practices -->
+    <div class="guide-section">
+        <h2 class="mb-4">Best Practices for Device Reuse</h2>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h3 class="h5 mb-3">Before Reuse</h3>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">✓ Backup all important data</li>
+                            <li class="list-group-item">✓ Factory reset the device</li>
+                            <li class="list-group-item">✓ Clean and sanitize thoroughly</li>
+                            <li class="list-group-item">✓ Check for any security updates</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h3 class="h5 mb-3">Maintenance Tips</h3>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">✓ Regular software updates</li>
+                            <li class="list-group-item">✓ Keep devices clean and dust-free</li>
+                            <li class="list-group-item">✓ Monitor battery health</li>
+                            <li class="list-group-item">✓ Use protective cases when possible</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="guide-section text-center">
+        <div class="card bg-light">
+            <div class="card-body">
+                <h3 class="mb-3">Ready to Give Your Device a Second Life?</h3>
+                <p class="mb-4">Use our price calculator to check your device's value or submit it for recycling if reuse isn't an option.</p>
+                <a href="{% url 'price_calculator' %}" class="btn btn-primary me-2">Check Device Value</a>
+                <a href="{% url 'submit_ewaste' %}" class="btn btn-success">Submit for Recycling</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

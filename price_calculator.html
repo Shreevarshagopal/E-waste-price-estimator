@@ -1,0 +1,500 @@
+{% extends 'ewaste/base.html' %}
+{% load static %}
+
+{% block title %}E-Waste Price Calculator{% endblock %}
+
+{% block content %}
+<div class="calculator-wrapper">
+    <div class="calculator-container">
+        <div class="calculator-header">
+            <h1>E-Waste Price Calculator</h1>
+            <p class="subtitle">Get an instant estimate for your electronic waste</p>
+        </div>
+        
+        <div class="calculator-content">
+            <!-- Left Column: Device Selection and Condition Assessment -->
+            <div class="form-fields">
+                <div class="form-group">
+                    <label for="deviceType">Device Type</label>
+                    <select id="deviceType" name="deviceType" class="form-select" required>
+                        <option value="">Select Device Type</option>
+                        <option value="phone">Mobile Phone</option>
+                        <option value="laptop">Laptop</option>
+                        <option value="tablet">Tablet</option>
+                        <option value="tv">Television</option>
+                        <option value="console">Gaming Console</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label for="brand">Brand</label>
+                    <select id="brand" name="brand" class="form-select" disabled required>
+                        <option value="">Select Brand</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label for="model">Model</label>
+                    <select id="model" name="model" class="form-select" disabled required>
+                        <option value="">Select Model</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label for="overallCondition">Overall Condition</label>
+                    <select id="overallCondition" name="overallCondition" class="form-select" required>
+                        <option value="">Select Condition</option>
+                        <option value="working">Working (100%)</option>
+                        <option value="partially_working">Partially Working (60%)</option>
+                        <option value="not_working">Not Working (30%)</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label for="screenCondition">Screen Condition</label>
+                    <select id="screenCondition" name="screenCondition" class="form-select" required>
+                        <option value="">Select Screen Condition</option>
+                        <option value="perfect">Perfect</option>
+                        <option value="minor_scratches">Minor Scratches</option>
+                        <option value="cracked">Cracked</option>
+                        <option value="not_working">Not Working</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label for="batteryStatus">Battery Status</label>
+                    <select id="batteryStatus" name="batteryStatus" class="form-select" required>
+                        <option value="">Select Battery Status</option>
+                        <option value="excellent">Excellent (>80%)</option>
+                        <option value="good">Good (60-80%)</option>
+                        <option value="fair">Fair (40-60%)</option>
+                        <option value="poor">Poor (<40%)</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label for="motherboardStatus">Motherboard Status</label>
+                    <select id="motherboardStatus" name="motherboardStatus" class="form-select" required>
+                        <option value="">Select Motherboard Status</option>
+                        <option value="working">Fully Working</option>
+                        <option value="minor_issues">Minor Issues</option>
+                        <option value="major_issues">Major Issues</option>
+                        <option value="not_working">Not Working</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label for="age">Device Age (in years)</label>
+                    <input type="number" id="age" name="age" class="form-control" min="0" max="20" required>
+                </div>
+            </div>
+            
+            <!-- Right Column: Price Display Section -->
+            <div class="price-display-section">
+                <div class="price-card">
+                    <div class="initial-message">
+                        <i class="fas fa-calculator"></i>
+                        <p>Complete the form to get your device's estimated value</p>
+                    </div>
+            
+                    <div class="loading-spinner" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Calculating...</p>
+                    </div>
+            
+                    <div class="price-breakdown" style="display: none;">
+                        <h3 class="final-price">Estimated Value: <span class="value">₹0</span></h3>
+                        <p class="text-muted">* Final value may vary based on detailed inspection</p>
+                    </div>
+            
+                    <button id="calculatePrice" class="btn btn-primary btn-lg px-5">Calculate Price</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.calculator-wrapper {
+    min-height: calc(100vh - 200px);
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 2rem 1rem;
+}
+
+.calculator-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    padding: 2.5rem;
+}
+
+.calculator-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.calculator-header h1 {
+    color: #2c3e50;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.calculator-header .subtitle {
+    color: #64748b;
+    font-size: 1.1rem;
+}
+
+.calculator-content {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 2.5rem;
+    align-items: start;
+}
+
+.form-fields {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 0;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #334155;
+}
+
+.form-select,
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background-color: #fff;
+    color: #1e293b;
+    transition: all 0.2s;
+}
+
+.form-select:focus,
+.form-control:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    outline: none;
+}
+
+.price-display-section {
+    position: sticky;
+    top: 2rem;
+}
+
+.price-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    padding: 2rem;
+    text-align: center;
+}
+
+.initial-message {
+    color: #64748b;
+    margin-bottom: 2rem;
+}
+
+.initial-message i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #3b82f6;
+}
+
+.loading-spinner {
+    margin: 2rem 0;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 1rem;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.price-breakdown {
+    margin-bottom: 2rem;
+}
+
+.final-price {
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.value {
+    color: #3b82f6;
+    font-weight: 700;
+}
+
+.text-muted {
+    color: #64748b;
+    font-size: 0.875rem;
+}
+
+.btn-primary {
+    background-color: #3b82f6;
+    border-color: #3b82f6;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #2563eb;
+    border-color: #2563eb;
+    transform: translateY(-1px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 1024px) {
+    .calculator-content {
+        grid-template-columns: 1fr;
+    }
+
+    .price-display-section {
+        position: static;
+    }
+}
+
+@media (max-width: 640px) {
+    .calculator-container {
+        padding: 1.5rem;
+    }
+
+    .calculator-header h1 {
+        font-size: 2rem;
+    }
+}
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Get references to the select elements
+    const $deviceType = $('#deviceType');
+    const $brand = $('#brand');
+    const $model = $('#model');
+    const $overallCondition = $('#overallCondition');
+    const $screenCondition = $('#screenCondition');
+    const $batteryStatus = $('#batteryStatus');
+    const $motherboardStatus = $('#motherboardStatus');
+    const $age = $('#age');
+    
+    // Base prices for different device types (in INR)
+    const basePrice = {
+        phone: {
+            'Apple': { base: 50000, depreciation: 0.15 },
+            'Samsung': { base: 45000, depreciation: 0.18 },
+            'OnePlus': { base: 40000, depreciation: 0.20 },
+            'Xiaomi': { base: 35000, depreciation: 0.22 }
+        },
+        laptop: {
+            'Apple': { base: 120000, depreciation: 0.12 },
+            'Dell': { base: 90000, depreciation: 0.15 },
+            'HP': { base: 85000, depreciation: 0.15 },
+            'Lenovo': { base: 80000, depreciation: 0.15 }
+        },
+        tablet: {
+            'Apple': { base: 70000, depreciation: 0.15 },
+            'Samsung': { base: 60000, depreciation: 0.18 },
+            'Microsoft': { base: 65000, depreciation: 0.16 },
+            'Lenovo': { base: 50000, depreciation: 0.20 }
+        },
+        tv: {
+            'Samsung': { base: 100000, depreciation: 0.12 },
+            'LG': { base: 95000, depreciation: 0.12 },
+            'Sony': { base: 110000, depreciation: 0.12 },
+            'TCL': { base: 70000, depreciation: 0.15 }
+        },
+        console: {
+            'Sony': { base: 45000, depreciation: 0.10 },
+            'Microsoft': { base: 45000, depreciation: 0.10 },
+            'Nintendo': { base: 35000, depreciation: 0.08 }
+        }
+    };
+
+    // Condition multipliers
+    const conditionMultipliers = {
+        overallCondition: {
+            'working': 1.0,
+            'partially_working': 0.6,
+            'not_working': 0.3
+        },
+        screenCondition: {
+            'perfect': 1.0,
+            'minor_scratches': 0.8,
+            'cracked': 0.5,
+            'not_working': 0.3
+        },
+        batteryStatus: {
+            'excellent': 1.0,
+            'good': 0.8,
+            'fair': 0.6,
+            'poor': 0.4
+        },
+        motherboardStatus: {
+            'working': 1.0,
+            'minor_issues': 0.7,
+            'major_issues': 0.4,
+            'not_working': 0.2
+        }
+    };
+
+    // Brand and model data structure
+    const deviceBrands = {
+        phone: ['Apple', 'Samsung', 'OnePlus', 'Xiaomi'],
+        laptop: ['Apple', 'Dell', 'HP', 'Lenovo'],
+        tablet: ['Apple', 'Samsung', 'Microsoft', 'Lenovo'],
+        tv: ['Samsung', 'LG', 'Sony', 'TCL'],
+        console: ['Sony', 'Microsoft', 'Nintendo']
+    };
+
+    const deviceModels = {
+        'Apple': {
+            phone: ['iPhone 14 Pro', 'iPhone 14', 'iPhone 13 Pro', 'iPhone 13', 'iPhone 12', 'iPhone 11'],
+            laptop: ['MacBook Pro 16"', 'MacBook Pro 14"', 'MacBook Air M2', 'MacBook Air M1'],
+            tablet: ['iPad Pro 12.9"', 'iPad Pro 11"', 'iPad Air', 'iPad Mini']
+        },
+        'Samsung': {
+            phone: ['Galaxy S23 Ultra', 'Galaxy S23+', 'Galaxy S23', 'Galaxy S22', 'Galaxy A53'],
+            tablet: ['Galaxy Tab S8 Ultra', 'Galaxy Tab S8+', 'Galaxy Tab S8', 'Galaxy Tab A8'],
+            tv: ['Neo QLED 8K', 'Neo QLED 4K', 'QLED 4K', 'Crystal UHD']
+        },
+        'OnePlus': {
+            phone: ['11 Pro', '11', '10T', '10 Pro', 'Nord']
+        },
+        'Xiaomi': {
+            phone: ['13 Pro', '13', '12 Pro', '12', 'Redmi Note 12']
+        },
+        'Dell': {
+            laptop: ['XPS 15', 'XPS 13', 'Latitude', 'Inspiron', 'Precision']
+        },
+        'HP': {
+            laptop: ['Spectre x360', 'Envy', 'Pavilion', 'EliteBook', 'ProBook']
+        },
+        'Lenovo': {
+            laptop: ['ThinkPad X1', 'ThinkPad T', 'Yoga', 'IdeaPad', 'Legion'],
+            tablet: ['Tab P12 Pro', 'Tab P11 Pro', 'Tab M10', 'Tab M8']
+        },
+        'Microsoft': {
+            tablet: ['Surface Pro 9', 'Surface Pro 8', 'Surface Go 3'],
+            console: ['Xbox Series X', 'Xbox Series S', 'Xbox One X']
+        },
+        'LG': {
+            tv: ['OLED C2', 'OLED G2', 'QNED', 'NanoCell']
+        },
+        'Sony': {
+            tv: ['Bravia XR A80K', 'Bravia XR X95K', 'Bravia X85K', 'Bravia X80K'],
+            console: ['PlayStation 5', 'PlayStation 4 Pro', 'PlayStation 4']
+        },
+        'TCL': {
+            tv: ['6-Series', '5-Series', '4-Series', '3-Series']
+        },
+        'Nintendo': {
+            console: ['Switch OLED', 'Switch', 'Switch Lite']
+        }
+    };
+
+    // Handle device type change
+    $deviceType.on('change', function() {
+        const selectedType = $(this).val();
+        
+        // Reset and disable brand dropdown
+        $brand.empty().append('<option value="">Select Brand</option>');
+        $model.empty().append('<option value="">Select Model</option>');
+        
+        if (selectedType) {
+            // Enable and populate brand dropdown
+            $brand.prop('disabled', false);
+            deviceBrands[selectedType].forEach(brand => {
+                $brand.append(`<option value="${brand}">${brand}</option>`);
+            });
+        } else {
+            $brand.prop('disabled', true);
+            $model.prop('disabled', true);
+        }
+    });
+
+    // Handle brand change
+    $brand.on('change', function() {
+        const selectedType = $deviceType.val();
+        const selectedBrand = $(this).val();
+        
+        // Reset and disable model dropdown
+        $model.empty().append('<option value="">Select Model</option>');
+        
+        if (selectedBrand && deviceModels[selectedBrand]?.[selectedType]) {
+            // Enable and populate model dropdown
+            $model.prop('disabled', false);
+            deviceModels[selectedBrand][selectedType].forEach(model => {
+                $model.append(`<option value="${model}">${model}</option>`);
+            });
+        } else {
+            $model.prop('disabled', true);
+        }
+    });
+
+    $('#calculatePrice').click(function() {
+        const deviceType = $deviceType.val();
+        const brand = $brand.val();
+        const age = parseInt($age.val());
+
+        if (!deviceType || !brand || isNaN(age)) {
+            alert('Please fill in all required fields');
+            return;
+        }
+
+        // Show loading spinner
+        $('.initial-message').hide();
+        $('.loading-spinner').show();
+        $('.price-breakdown').hide();
+
+        setTimeout(() => {
+            // Calculate base value
+            let baseValue = basePrice[deviceType][brand].base;
+            const yearlyDepreciation = basePrice[deviceType][brand].depreciation;
+
+            // Apply age depreciation
+            baseValue *= Math.pow(1 - yearlyDepreciation, age);
+
+            // Apply condition multipliers
+            baseValue *= conditionMultipliers.overallCondition[$overallCondition.val()];
+            baseValue *= conditionMultipliers.screenCondition[$screenCondition.val()];
+            baseValue *= conditionMultipliers.batteryStatus[$batteryStatus.val()];
+            baseValue *= conditionMultipliers.motherboardStatus[$motherboardStatus.val()];
+
+            // Round to nearest hundred
+            const finalValue = Math.round(baseValue / 100) * 100;
+
+            // Update UI
+            $('.loading-spinner').hide();
+            $('.price-breakdown').show();
+            $('.price-breakdown .value').text('₹' + finalValue.toLocaleString());
+        }, 1000);
+    });
+});
+</script>
+{% endblock %}
